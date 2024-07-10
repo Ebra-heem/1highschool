@@ -16,6 +16,16 @@
 
         </ul>
       </li>
+      <li class="menu-header">Students</li>
+      <li class="dropdown {{ Route::is('students.*')  ? 'active' : '' }}">
+        <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i><span>Students</span></a>
+        <ul class="dropdown-menu">
+          <li><a class="nav-link" href="{{ route('students.create') }}">Add New Student</a></li>
+          <li><a class="nav-link" href="{{ route('students.index') }}">Admitted Student</a></li>
+
+        </ul>
+      </li>
+
       <li class="menu-header">User Management</li>
       <li
         class="dropdown {{ Route::is('users.*') || Route::is('roles.*')||Route::is('permissions.*') ? 'active' : '' }}">

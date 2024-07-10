@@ -1,11 +1,13 @@
 <?php
 
+use App\Models\School;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\PermissionController;
 
 /*
@@ -20,8 +22,10 @@ use App\Http\Controllers\PermissionController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+     $schools = School::all();
+    return view('admission',compact('schools'));
 });
+
 
 Auth::routes();
 
@@ -29,11 +33,12 @@ Auth::routes();
 
 Route::resource('schools', SchoolController::class);
 
-Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/profile', [App\Http\Controllers\HomeController::class, 'profile'])->name('profile');
+Route::get('/dashboard', [HomeController::class, 'index'])->name('home');
+Route::get('/profile', [HomeController::class, 'profile'])->name('profile');
 
 Route::resources([
     'roles' => RoleController::class,
     'users' => UserController::class,
     'permissions'=>PermissionController::class
 ]);
+Route::resource('students', StudentController::class);

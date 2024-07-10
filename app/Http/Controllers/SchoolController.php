@@ -37,9 +37,9 @@ class SchoolController extends Controller
             'code' => 'required',
             'logo' => 'required|image'
         ]);
-
-        $data['logo'] = $request->file('logo')->store('public/assets/images');
-
+        if ($request->hasFile('logo')) {
+            $data['logo'] = $request->file('logo')->store('storage/assets/images');
+        }
         $this->schoolRepository->create($data);
 
         return redirect()->route('schools.index');
@@ -72,7 +72,7 @@ class SchoolController extends Controller
         ]);
 
         if ($request->hasFile('logo')) {
-            $data['logo'] = $request->file('logo')->store('public/assets/images');
+            $data['logo'] = $request->file('logo')->store('storage/assets/images');
         }
 
         $this->schoolRepository->update($school, $data);
