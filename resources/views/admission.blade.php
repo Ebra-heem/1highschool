@@ -75,7 +75,7 @@
     </div>
     <div class="container">
         <div class="row justify-content-center">
-            <h2>Student Admission Form</h2>
+            <h2>Student Admission Form for School</h2>
             <form action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <!-- Student Information -->
