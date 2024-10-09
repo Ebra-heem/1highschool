@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories\Eloquent;
 
 use App\Models\Student;
@@ -9,12 +10,15 @@ class StudentRepository implements StudentRepositoryInterface
 {
     public function all()
     {
+        if (auth()->user()->school_id) {
+            return Student::where('school_id', auth()->user()->school_id)->get();
+        }
         return Student::all();
     }
 
     public function create(array $data)
     {
-        
+
         return Student::create($data);
     }
 

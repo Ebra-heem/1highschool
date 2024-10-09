@@ -5,13 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admission</title>
-    <link rel="apple-touch-icon" sizes="180x180"
-        href="https://jobs.baiust.ac.bd/backend/assets/favicon/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32"
-        href="https://jobs.baiust.ac.bd/backend/assets/favicon/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('/backend/assets/favicon/android-chrome-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('/backend/assets/favicon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16"
-        href="https://jobs.baiust.ac.bd/backend/assets/favicon/favicon-16x16.png">
-    <link rel="manifest" href="https://jobs.baiust.ac.bd/backend/assets/favicon/site.webmanifest">
+        href="{{ asset('/backend/assets/favicon/favicon-16x16.png') }}">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .header-image {
@@ -43,6 +41,10 @@
             font-weight: bold;
             text-transform: uppercase;
         }
+
+        .white {
+            color: #fff;
+        }
     </style>
 </head>
 
@@ -54,41 +56,67 @@
                 <ul class="navbar-nav ml-auto">
 
                     <li class="nav-item">
-                        <a href="https://jobs.baiust.ac.bd/login" class="nav-link">Log in</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="https://jobs.baiust.ac.bd/register" class="nav-link">Register</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">User Guide</a>
+                        <a class="nav-link" href="{{ url('/') }}">আবেদন খুঁজুন </a>
                     </li>
                 </ul>
             </div>
         </nav>
     </div>
-
-    <div class="header-image">
-        <div class="row">
-
-        </div>
-    </div>
     <div class="container">
         <div class="row justify-content-center">
-            <h2>Student Admission Form for School</h2>
-            <form action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data">
+            <h2 class="py-2 text-success">ছাত্র / ছাত্রীদের ভর্তি ফরম </h2>
+            <form action="{{ route('students.save') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <!-- Student Information -->
                 <div class="card mb-3">
-                    <div class="card-header bg-info">Student Information</div>
+                    <div class="card-header bg-info white">Admission and Student Information</div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="school_id">School</label>
+                            <label for="school_id">School Name(যে স্কুলে ভর্তি হতে চাও সেটি সিলেক্ট করো)</label>
                             <select class="form-control" name="school_id">
                                 @foreach ($schools as $school)
-                                <option value="{{ $school->id }}">{{ $school->name }}</option>
+                                    <option value="{{ $school->id }}">{{ $school->name }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="class">Select a Class <small>(তুমি যে শ্রেণিতে ভর্তি হতে চাও)
+                                    </small></label>
+                                <select class="form-control" id="class" name="class" required>
+                                    <option value="Play">Play</option>
+                                    <option value="Nursery">Nursery</option>
+                                    <option value="Class-1">Class-1</option>
+                                    <option value="Class-2">Class-2</option>
+                                    <option value="Class-3">Class-3</option>
+                                    <option value="Class-4">Class-4</option>
+                                    <option value="Class-5">Class-5</option>
+                                    <option selected value="Class-6">Class-6</option>
+                                    <option value="Class-7">Class-7</option>
+                                    <option value="Class-8">Class-8</option>
+                                    <option value="Class-9">Class-9</option>
+                                    <option value="Class-10">Class-10</option>
+                                    <option value="Class-11">Class-11</option>
+                                    <option value="Class-12">Class-12</option>
+                                    <!-- Add more options as needed -->
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="group_department">Select Group/Department</label>
+                                <select class="form-control" id="group_department" name="group_department">
+                                    <option value="Science">Science</option>
+                                    <option value="Commerce">Commerce</option>
+                                    <option value="Arts">Arts</option>
+                                    <option selected value="General">General</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="class_section">Academic Year</label>
+                                <select class="form-control" id="academic_year" name="academic_year">
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="student_image">Student Image (.jpg/.png support)</label>
@@ -96,21 +124,21 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="student_name_english">Student Name (English)</label>
-                                <input type="text" class="form-control" id="student_name_english"
-                                    name="student_name_english" required>
+                                <label for="student_name_english">Student Name (in English)</label>
+                                <input type="text" placeholder="তোমার নাম ইংরেজিতে লিখ " class="form-control"
+                                    id="student_name_english" name="student_name_english" required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="student_name_bangla">Student Name (Bangla)</label>
-                                <input type="text" class="form-control" id="student_name_bangla"
-                                    name="student_name_bangla">
+                                <label for="student_name_bangla">Student Name (in Bangla)</label>
+                                <input type="text" placeholder="তোমার নাম বাংলায় লিখ " class="form-control"
+                                    id="student_name_bangla" name="student_name_bangla">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="mobile_number">Mobile Number</label>
-                                <input type="text" class="form-control" id="mobile_number" name="mobile_number"
-                                    required>
+                                <label for="mobile_number">Guardian Mobile Number</label>
+                                <input type="text" placeholder="তোমার অভিভাবকের মোবাইল নাম্বার লিখ "
+                                    class="form-control" id="mobile_number" name="mobile_number" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="email">Email (Optional)</label>
@@ -125,7 +153,8 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="birth_certificate">Birth Certificate No</label>
-                                <input type="text" class="form-control" id="birth_certificate" name="birth_certificate">
+                                <input type="text" placeholder="তোমার জন্ম নিবন্ধন নম্বর লিখ" class="form-control"
+                                    id="birth_certificate" name="birth_certificate">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="gender">Gender</label>
@@ -139,7 +168,14 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="religion">Religion</label>
-                                <input type="text" class="form-control" id="religion" name="religion" required>
+                                <select class="form-control" id="religion" name="religion" required>
+                                    <option value="Islam">Islam</option>
+                                    <option value="Hindu">Hindu</option>
+                                    <option value="Cristian">Cristian</option>
+                                    <option value="Buddhist">Buddhist</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                </select>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="blood_group">Blood Group</label>
@@ -156,79 +192,98 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="present_school_name">Present School Name</label>
-                            <input type="text" class="form-control" id="present_school_name" name="present_school_name">
+                            <label for="present_school_name">Previous School Name(পূর্বে অধ্যয়নকৃত স্কুলের নাম লিখ
+                                )</label>
+                            <input type="text" placeholder="N/A" class="form-control" id="present_school_name"
+                                name="present_school_name">
                         </div>
                     </div>
                 </div>
 
                 <!-- Parents Information -->
                 <div class="card mb-3">
-                    <div class="card-header bg-primary">Parents Information</div>
+                    <div class="card-header bg-primary white">Parents Information</div>
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="father_name_english">Father Name (English)</label>
-                                <input type="text" class="form-control" id="father_name_english"
-                                    name="father_name_english" required>
+                                <label for="father_name_english">Father's Name (in English)</label>
+                                <input type="text" placeholder="তোমার বাবার নাম ইংরেজিতে লিখ "
+                                    class="form-control" id="father_name_english" name="father_name_english"
+                                    required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="father_name_bangla">Father Name (Bangla)</label>
-                                <input type="text" class="form-control" id="father_name_bangla"
-                                    name="father_name_bangla">
+                                <label for="father_name_bangla">Father's Name (in Bangla)</label>
+                                <input type="text" placeholder="তোমার বাবার  নাম বাংলায় লিখ " class="form-control"
+                                    id="father_name_bangla" name="father_name_bangla">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label for="father_date_of_birth">Date of Birth</label>
-                                <input type="date" class="form-control" id="father_date_of_birth"
-                                    name="father_date_of_birth">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="father_nid_number">National ID Number</label>
-                                <input type="text" class="form-control" id="father_nid_number" name="father_nid_number">
+                                <label for="father_nid_number">Father's NID Number</label>
+                                <input type="text" placeholder="তোমার বাবার এন আই ডি নম্বর  লিখ "
+                                    class="form-control" id="father_nid_number" name="father_nid_number">
                             </div>
                             <div class="form-group col-md-4">
                                 <label for="father_profession">Father Profession</label>
-                                <input type="text" class="form-control" id="father_profession" name="father_profession">
+                                <select class="form-control" id="father_profession" name="father_profession">
+                                    <option value="Government Service">Government Service</option>
+                                    <option value="Government Service (Retd)">Government Service (Retd)</option>
+                                    <option value="Private Service">Private Service</option>
+                                    <option value="Private Service (Retd)">Private Service (Retd)</option>
+                                    <option value="Army">Army</option>
+                                    <option value="Army (Retd)">Army (Retd)</option>
+                                    <option value="Navy">Navy</option>
+                                    <option value="Navy (Retd)">Navy (Retd)</option>
+                                    <option value="Police">Police</option>
+                                    <option value="Police (Retd)">Police (Retd)</option>
+                                    <option value="Air Force">Air Force</option>
+                                    <option value="Air Force (Retd)">Air Force (Retd)</option>
+                                    <option value="Lawyer">Lawyer</option>
+                                    <option value="Doctor">Doctor</option>
+                                    <option value="Engineer">Engineer</option>
+                                    <option value="Teacher">Teacher</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Expatriate/Immigrant">Expatriate/Immigrant</option>
+                                    <option value="Farmer">Farmer</option>
+                                    <option value="N/A">Others</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label for="father_contact_number">Contact Number (Optional)</label>
-                                <input type="text" class="form-control" id="father_contact_number"
-                                    name="father_contact_number">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="mother_name_english">Mother Name (English)</label>
-                                <input type="text" class="form-control" id="mother_name_english"
-                                    name="mother_name_english" required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="mother_name_bangla">Mother Name (Bangla)</label>
-                                <input type="text" class="form-control" id="mother_name_bangla"
-                                    name="mother_name_bangla">
+                                <label for="father_contact_number">Father's Mobile Number</label>
+                                <input type="text" placeholder="তোমার বাবার মোবাইল নম্বর  লিখ "
+                                    class="form-control" id="father_contact_number" name="father_contact_number">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="mother_date_of_birth">Date of Birth</label>
-                                <input type="date" class="form-control" id="mother_date_of_birth"
-                                    name="mother_date_of_birth">
+                                <label for="mother_name_english">Mother's Name (in English)</label>
+                                <input type="text" placeholder="তোমার মায়ের নাম ইংরেজিতে লিখ "
+                                    class="form-control" id="mother_name_english" name="mother_name_english"
+                                    required>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="mother_nid_number">National ID Number</label>
-                                <input type="text" class="form-control" id="mother_nid_number" name="mother_nid_number">
+                                <label for="mother_name_bangla">Mother's Name (in Bangla)</label>
+                                <input type="text" placeholder="তোমার মায়ের  নাম বাংলায় লিখ " class="form-control"
+                                    id="mother_name_bangla" name="mother_name_bangla">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="mother_profession">Mother Profession</label>
-                            <input type="text" class="form-control" id="mother_profession" name="mother_profession">
-                        </div>
-                        <div class="form-group">
-                            <label for="parents_yearly_income">Parents Yearly Income</label>
-                            <input type="text" class="form-control" id="parents_yearly_income"
-                                name="parents_yearly_income">
+                        <div class="form-row">
+
+                            <div class="form-group col-md-4">
+                                <label for="mother_nid_number">Mother's NID Number</label>
+                                <input type="text" placeholder="তোমার মায়ের এন আই ডি নম্বর লিখ "
+                                    class="form-control" id="mother_nid_number" name="mother_nid_number">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="mother_profession">Mother Profession</label>
+                                <input type="text" placeholder="Housewife" class="form-control"
+                                    id="mother_profession" name="mother_profession">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="parents_yearly_income">Parents Yearly Income</label>
+                                <input type="text" placeholder="তোমার বাবা মায়ের বছরের আয় " class="form-control"
+                                    id="parents_yearly_income" name="parents_yearly_income">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -240,23 +295,23 @@
                         <div class="form-row">
                             <div class="form-group col-md-3">
                                 <label for="present_address_village">Village/House, Road</label>
-                                <input type="text" class="form-control" id="present_address_village"
-                                    name="present_address_village" required>
+                                <input type="text" placeholder="তোমার গ্রামের নাম লিখ " class="form-control"
+                                    id="present_address_village" name="present_address_village" required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="present_address_post_block">Post/Block, Section</label>
-                                <input type="text" class="form-control" id="present_address_post_block"
-                                    name="present_address_post_block" required>
+                                <input type="text" placeholder="তোমার পোস্ট অফিসের নাম লিখ" class="form-control"
+                                    id="present_address_post_block" name="present_address_post_block" required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="present_address_thana">Thana</label>
-                                <input type="text" class="form-control" id="present_address_thana"
-                                    name="present_address_thana" required>
+                                <input type="text" placeholder="তোমার থানার নাম লিখ" class="form-control"
+                                    id="present_address_thana" name="present_address_thana" required>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="present_address_district">District</label>
-                                <input type="text" class="form-control" id="present_address_district"
-                                    name="present_address_district" required>
+                                <input type="text" placeholder="তোমার জেলার নাম লিখ" class="form-control"
+                                    id="present_address_district" name="present_address_district" required>
                             </div>
                         </div>
                     </div>
@@ -266,103 +321,61 @@
                 <div class="card mb-3">
                     <div class="card-header">
                         Permanent Address
-                        <input type="checkbox" id="same_as_present_address" name="same_as_present_address" value="1"
-                            onclick="copyAddress()"> Same as present address
+                        <input type="checkbox" id="same_as_present_address" name="same_as_present_address"
+                            value="1" onclick="copyAddress()"> <small>Same as present address</small>
                     </div>
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-md-3">
                                 <label for="permanent_address_village">Village/House, Road</label>
-                                <input type="text" class="form-control" id="permanent_address_village"
-                                    name="permanent_address_village">
+                                <input type="text" placeholder="তোমার গ্রামের নাম লিখ " class="form-control"
+                                    id="permanent_address_village" name="permanent_address_village">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="permanent_address_post_block">Post/Block, Section</label>
-                                <input type="text" class="form-control" id="permanent_address_post_block"
-                                    name="permanent_address_post_block">
+                                <input type="text" placeholder="তোমার পোস্ট অফিসের নাম লিখ" class="form-control"
+                                    id="permanent_address_post_block" name="permanent_address_post_block">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="permanent_address_thana">Thana</label>
-                                <input type="text" class="form-control" id="permanent_address_thana"
-                                    name="permanent_address_thana">
+                                <input type="text" placeholder="তোমার থানার নাম লিখ" class="form-control"
+                                    id="permanent_address_thana" name="permanent_address_thana">
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="permanent_address_district">District</label>
-                                <input type="text" class="form-control" id="permanent_address_district"
-                                    name="permanent_address_district">
+                                <input type="text" placeholder="তোমার জেলার নাম লিখ" class="form-control"
+                                    id="permanent_address_district" name="permanent_address_district">
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Student Admission Information -->
-                <div class="card mb-3">
-                    <div class="card-header bg-success">Student Admission Information</div>
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="class">Select Class</label>
-                                <select class="form-control" id="class" name="class" required>
-                                    <option value="Class 1">Class 1</option>
-                                    <option value="Class 2">Class 2</option>
-                                    <!-- Add more options as needed -->
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="group_department">Select Group/Department</label>
-                                <select class="form-control" id="group_department" name="group_department">
-                                    <option value="Science">Science</option>
-                                    <option value="Commerce">Commerce</option>
-                                    <option value="Arts">Arts</option>
-                                    <!-- Add more options as needed -->
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="class_section">Class Section</label>
-                                <input type="text" class="form-control" id="class_section" name="class_section">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="class_shift">Class Shift</label>
-                                <input type="text" class="form-control" id="class_shift" name="class_shift">
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="academic_year">Academic Year</label>
-                                <input type="text" class="form-control" id="academic_year" name="academic_year"
-                                    required>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label for="student_quotes">Student Quotes</label>
-                                <input type="text" class="form-control" id="student_quotes" name="student_quotes">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="get_admission_in_any_institution">Get Admission In Any Institution</label>
-                            <select class="form-control" id="get_admission_in_any_institution"
-                                name="get_admission_in_any_institution">
-                                <option value="1">Yes</option>
-                                <option value="0">No</option>
-                            </select>
-                        </div>
+                <div class="row">
+                    <div class="offset-8">
+
+                        <button type="submit" class="btn btn-lg btn-primary">Submit Application</button>
                     </div>
                 </div>
-
-                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     </div>
+    <div class="header-image mt-5">
 
+    </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         function copyAddress() {
             if (document.getElementById('same_as_present_address').checked) {
-                document.getElementById('permanent_address_village').value = document.getElementById('present_address_village').value;
-                document.getElementById('permanent_address_post_block').value = document.getElementById('present_address_post_block').value;
-                document.getElementById('permanent_address_thana').value = document.getElementById('present_address_thana').value;
-                document.getElementById('permanent_address_district').value = document.getElementById('present_address_district').value;
+                document.getElementById('permanent_address_village').value = document.getElementById(
+                    'present_address_village').value;
+                document.getElementById('permanent_address_post_block').value = document.getElementById(
+                    'present_address_post_block').value;
+                document.getElementById('permanent_address_thana').value = document.getElementById('present_address_thana')
+                    .value;
+                document.getElementById('permanent_address_district').value = document.getElementById(
+                    'present_address_district').value;
             } else {
                 document.getElementById('permanent_address_village').value = '';
                 document.getElementById('permanent_address_post_block').value = '';

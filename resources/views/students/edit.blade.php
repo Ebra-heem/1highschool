@@ -8,18 +8,17 @@
                 <div class="breadcrumb-item active"><a href="{{ route('home') }}">Dashboard</a></div>
             </div>
         </div>
-        <h6>Student Registration Form</h6>
+        <h6>Student Admission Form Edit</h6>
         <div class="section-body">
             <div class="container">
                 <div class="row justify-content-center">
-                    <h2 class="py-2 text-success">ছাত্র / ছাত্রীদের ভর্তি ফরম </h2>
-                    <form action="{{ route('students.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('students.update', $student->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card mb-3">
                             <div class="card-header bg-info white">Admission and Student Information</div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="school_id">School Name(যে স্কুলে ভর্তি হতে চাও সেটি সিলেক্ট করো)</label>
+                                    <label for="school_id">School Name</label>
 
                                     @php
                                         $school = DB::table('schools')
@@ -37,6 +36,7 @@
                                         <label for="class">Select a Class <small>(তুমি যে শ্রেণিতে ভর্তি হতে চাও)
                                             </small></label>
                                         <select class="form-control" id="class" name="class" required>
+                                            <option selected value="{{ $student->class }}">{{ $student->class }}</option>
                                             <option value="Play">Play</option>
                                             <option value="Nursery">Nursery</option>
                                             <option value="Class-1">Class-1</option>
@@ -44,7 +44,7 @@
                                             <option value="Class-3">Class-3</option>
                                             <option value="Class-4">Class-4</option>
                                             <option value="Class-5">Class-5</option>
-                                            <option selected value="Class-6">Class-6</option>
+                                            <option value="Class-6">Class-6</option>
                                             <option value="Class-7">Class-7</option>
                                             <option value="Class-8">Class-8</option>
                                             <option value="Class-9">Class-9</option>
@@ -57,6 +57,8 @@
                                     <div class="form-group col-md-4">
                                         <label for="group_department">Select Group/Department</label>
                                         <select class="form-control" id="group_department" name="group_department">
+                                            <option selected value="{{ $student->group_department }}">
+                                                {{ $student->group_department }}</option>
                                             <option value="Science">Science</option>
                                             <option value="Commerce">Commerce</option>
                                             <option value="Arts">Arts</option>
@@ -66,6 +68,8 @@
                                     <div class="form-group col-md-4">
                                         <label for="class_section">Academic Year</label>
                                         <select class="form-control" id="academic_year" name="academic_year">
+                                            <option selected value="{{ $student->academic_year }}">
+                                                {{ $student->academic_year }}</option>
                                             <option value="2025">2025</option>
                                             <option value="2026">2026</option>
                                             <option value="2027">2027</option>
@@ -75,16 +79,23 @@
                                 <div class="form-row ">
                                     <div class="form-group col-md-4">
                                         <label for="student_image">Student Image (.jpg/.png support)</label>
+                                        <img class="float-right mr-5"
+                                            src="{{ asset(str_replace('public/', 'storage/', "$student->student_image")) }}"
+                                            width="100px;" height="100px;" />
                                         <input type="file" class="form-control-file" id="student_image"
                                             name="student_image">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="class_section">Section</label>
                                         <select class="form-control" id="class_section" name="class_section">
-                                            <option value="A">A</option>
-                                            <option value="B">B</option>
-                                            <option value="C">C</option>
-                                            <option value="D">D</option>
+                                            <option @if ($student->class_section == 'A') selected @endif value="A">A
+                                            </option>
+                                            <option @if ($student->class_section == 'A') selected @endif value="B">B
+                                            </option>
+                                            <option @if ($student->class_section == 'A') selected @endif value="C">C
+                                            </option>
+                                            <option @if ($student->class_section == 'A') selected @endif value="D">D
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -92,42 +103,50 @@
                                     <div class="form-group col-md-6">
                                         <label for="student_name_english">Student Name (in English)</label>
                                         <input type="text" placeholder="তোমার নাম ইংরেজিতে লিখ " class="form-control"
-                                            id="student_name_english" name="student_name_english" required>
+                                            id="student_name_english" value="{{ $student->student_name_english }}"
+                                            name="student_name_english" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="student_name_bangla">Student Name (in Bangla)</label>
                                         <input type="text" placeholder="তোমার নাম বাংলায় লিখ " class="form-control"
-                                            id="student_name_bangla" name="student_name_bangla">
+                                            id="student_name_bangla" value="{{ $student->student_name_bangla }}"
+                                            name="student_name_bangla">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="mobile_number">Guardian Mobile Number</label>
                                         <input type="text" placeholder="তোমার অভিভাবকের মোবাইল নাম্বার লিখ "
-                                            class="form-control" id="mobile_number" name="mobile_number" required>
+                                            class="form-control" id="mobile_number"
+                                            value="{{ $student->mobile_number }}" name="mobile_number" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="email">Email (Optional)</label>
-                                        <input type="email" class="form-control" id="email" name="email">
+                                        <input type="email" class="form-control" value="{{ $student->email }}"
+                                            id="email" name="email">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label for="date_of_birth">Date Of Birth</label>
-                                        <input type="date" class="form-control" id="date_of_birth"
-                                            name="date_of_birth" required>
+                                        <input type="date" class="form-control" value="{{ $student->date_of_birth }}"
+                                            id="date_of_birth" name="date_of_birth" required>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="birth_certificate">Birth Certificate No</label>
                                         <input type="text" placeholder="তোমার জন্ম নিবন্ধন নম্বর লিখ"
-                                            class="form-control" id="birth_certificate" name="birth_certificate">
+                                            class="form-control" id="birth_certificate"
+                                            value="{{ $student->birth_certificate }}" name="birth_certificate">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="gender">Gender</label>
                                         <select class="form-control" id="gender" name="gender" required>
-                                            <option value="male">Male</option>
-                                            <option value="female">Female</option>
-                                            <option value="other">Other</option>
+                                            <option @if ($student->gender == 'male') selected @endif value="male">Male
+                                            </option>
+                                            <option @if ($student->gender == 'female') selected @endif value="female">Female
+                                            </option>
+                                            <option @if ($student->gender == 'other') selected @endif value="other">Other
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -135,25 +154,38 @@
                                     <div class="form-group col-md-6">
                                         <label for="religion">Religion</label>
                                         <select class="form-control" id="religion" name="religion" required>
-                                            <option value="Islam">Islam</option>
-                                            <option value="Hindu">Hindu</option>
-                                            <option value="Cristian">Cristian</option>
-                                            <option value="Buddhist">Buddhist</option>
-                                            <option value="Other">Other</option>
+                                            <option @if ($student->religion == 'Islam') selected @endif value="Islam">Islam
+                                            </option>
+                                            <option @if ($student->religion == 'Hindu') selected @endif value="Hindu">Hindu
+                                            </option>
+                                            <option @if ($student->religion == 'Cristian') selected @endif value="Cristian">
+                                                Cristian</option>
+                                            <option @if ($student->religion == 'Buddhist') selected @endif value="Buddhist">
+                                                Buddhist</option>
+                                            <option @if ($student->religion == 'Other') selected @endif value="Other">
+                                                Other</option>
                                         </select>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="blood_group">Blood Group</label>
                                         <select class="form-control" id="blood_group" name="blood_group">
-                                            <option value="A+">A+</option>
-                                            <option value="A-">A-</option>
-                                            <option value="B+">B+</option>
-                                            <option value="B-">B-</option>
-                                            <option value="AB+">AB+</option>
-                                            <option value="AB-">AB-</option>
-                                            <option value="O+">O+</option>
-                                            <option value="O-">O-</option>
+                                            <option @if ($student->blood_group == 'A+') selected @endif value="A+">A+
+                                            </option>
+                                            <option @if ($student->blood_group == 'A-') selected @endif value="A-">A-
+                                            </option>
+                                            <option @if ($student->blood_group == 'B+') selected @endif value="B+">B+
+                                            </option>
+                                            <option @if ($student->blood_group == 'B-') selected @endif value="B-">B-
+                                            </option>
+                                            <option @if ($student->blood_group == 'AB+') selected @endif value="AB+">AB+
+                                            </option>
+                                            <option @if ($student->blood_group == 'AB-') selected @endif value="AB-">AB-
+                                            </option>
+                                            <option @if ($student->blood_group == 'O+') selected @endif value="O+">O+
+                                            </option>
+                                            <option @if ($student->blood_group == 'O-') selected @endif value="O-">O-
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -161,7 +193,8 @@
                                     <label for="present_school_name">Previous School Name(পূর্বে অধ্যয়নকৃত স্কুলের নাম লিখ
                                         )</label>
                                     <input type="text" placeholder="N/A" class="form-control"
-                                        id="present_school_name" name="present_school_name">
+                                        id="present_school_name" value="{{ $student->present_school_name }}"
+                                        name="present_school_name">
                                 </div>
                             </div>
                         </div>
@@ -174,20 +207,23 @@
                                     <div class="form-group col-md-6">
                                         <label for="father_name_english">Father's Name (in English)</label>
                                         <input type="text" placeholder="তোমার বাবার নাম ইংরেজিতে লিখ "
-                                            class="form-control" id="father_name_english" name="father_name_english"
+                                            class="form-control" id="father_name_english"
+                                            value="{{ $student->father_name_english }}" name="father_name_english"
                                             required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="father_name_bangla">Father's Name (in Bangla)</label>
                                         <input type="text" placeholder="তোমার বাবার  নাম বাংলায় লিখ "
-                                            class="form-control" id="father_name_bangla" name="father_name_bangla">
+                                            class="form-control" id="father_name_bangla"
+                                            value="{{ $student->father_name_bangla }}" name="father_name_bangla">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label for="father_nid_number">Father's NID Number</label>
                                         <input type="text" placeholder="তোমার বাবার এন আই ডি নম্বর  লিখ "
-                                            class="form-control" id="father_nid_number" name="father_nid_number">
+                                            class="form-control" id="father_nid_number"
+                                            value="{{ $student->father_nid_number }}" name="father_nid_number">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="father_profession">Father Profession</label>
@@ -217,20 +253,23 @@
                                     <div class="form-group col-md-4">
                                         <label for="father_contact_number">Father's Mobile Number</label>
                                         <input type="text" placeholder="তোমার বাবার মোবাইল নম্বর  লিখ "
-                                            class="form-control" id="father_contact_number" name="father_contact_number">
+                                            class="form-control" id="father_contact_number"
+                                            value="{{ $student->father_contact_number }}" name="father_contact_number">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="mother_name_english">Mother's Name (in English)</label>
                                         <input type="text" placeholder="তোমার মায়ের নাম ইংরেজিতে লিখ "
-                                            class="form-control" id="mother_name_english" name="mother_name_english"
+                                            class="form-control" id="mother_name_english"
+                                            value="{{ $student->mother_name_english }}" name="mother_name_english"
                                             required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="mother_name_bangla">Mother's Name (in Bangla)</label>
                                         <input type="text" placeholder="তোমার মায়ের  নাম বাংলায় লিখ "
-                                            class="form-control" id="mother_name_bangla" name="mother_name_bangla">
+                                            class="form-control" id="mother_name_bangla"
+                                            value="{{ $student->mother_name_bangla }}" name="mother_name_bangla">
                                     </div>
                                 </div>
                                 <div class="form-row">
@@ -238,17 +277,20 @@
                                     <div class="form-group col-md-4">
                                         <label for="mother_nid_number">Mother's NID Number</label>
                                         <input type="text" placeholder="তোমার মায়ের এন আই ডি নম্বর লিখ "
-                                            class="form-control" id="mother_nid_number" name="mother_nid_number">
+                                            class="form-control" id="mother_nid_number"
+                                            value="{{ $student->mother_nid_number }}" name="mother_nid_number">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="mother_profession">Mother Profession</label>
-                                        <input type="text" placeholder="Housewife" class="form-control"
+                                        <input type="text" placeholder="Housewife"
+                                            value="{{ $student->mother_profession }}" class="form-control"
                                             id="mother_profession" name="mother_profession">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="parents_yearly_income">Parents Yearly Income</label>
                                         <input type="text" placeholder="তোমার বাবা মায়ের বছরের আয় "
-                                            class="form-control" id="parents_yearly_income" name="parents_yearly_income">
+                                            class="form-control" id="parents_yearly_income"
+                                            value="{{ $student->parents_yearly_income }}" name="parents_yearly_income">
                                     </div>
                                 </div>
                             </div>
@@ -262,22 +304,25 @@
                                     <div class="form-group col-md-3">
                                         <label for="present_address_village">Village/House, Road</label>
                                         <input type="text" placeholder="তোমার গ্রামের নাম লিখ " class="form-control"
-                                            id="present_address_village" name="present_address_village" required>
+                                            id="present_address_village" value="{{ $student->present_address_village }}"
+                                            name="present_address_village" required>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="present_address_post_block">Post/Block, Section</label>
                                         <input type="text" placeholder="তোমার পোস্ট অফিসের নাম লিখ"
-                                            class="form-control" id="present_address_post_block"
-                                            name="present_address_post_block" required>
+                                            class="form-control" value="{{ $student->present_address_post_block }}"
+                                            id="present_address_post_block" name="present_address_post_block" required>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="present_address_thana">Thana</label>
-                                        <input type="text" placeholder="তোমার থানার নাম লিখ" class="form-control"
+                                        <input type="text" value="{{ $student->present_address_thana }}"
+                                            placeholder="তোমার থানার নাম লিখ" class="form-control"
                                             id="present_address_thana" name="present_address_thana" required>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="present_address_district">District</label>
-                                        <input type="text" placeholder="তোমার জেলার নাম লিখ" class="form-control"
+                                        <input type="text" placeholder="তোমার জেলার নাম লিখ"
+                                            value="{{ $student->present_address_district }}" class="form-control"
                                             id="present_address_district" name="present_address_district" required>
                                     </div>
                                 </div>
@@ -296,23 +341,28 @@
                                     <div class="form-group col-md-3">
                                         <label for="permanent_address_village">Village/House, Road</label>
                                         <input type="text" placeholder="তোমার গ্রামের নাম লিখ " class="form-control"
-                                            id="permanent_address_village" name="permanent_address_village">
+                                            id="permanent_address_village"
+                                            value="{{ $student->permanent_address_village }}"
+                                            name="permanent_address_village">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="permanent_address_post_block">Post/Block, Section</label>
                                         <input type="text" placeholder="তোমার পোস্ট অফিসের নাম লিখ"
-                                            class="form-control" id="permanent_address_post_block"
-                                            name="permanent_address_post_block">
+                                            class="form-control" value="{{ $student->permanent_address_post_block }}"
+                                            id="permanent_address_post_block" name="permanent_address_post_block">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="permanent_address_thana">Thana</label>
                                         <input type="text" placeholder="তোমার থানার নাম লিখ" class="form-control"
-                                            id="permanent_address_thana" name="permanent_address_thana">
+                                            id="permanent_address_thana" value="{{ $student->permanent_address_thana }}"
+                                            name="permanent_address_thana">
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label for="permanent_address_district">District</label>
                                         <input type="text" placeholder="তোমার জেলার নাম লিখ" class="form-control"
-                                            id="permanent_address_district" name="permanent_address_district">
+                                            id="permanent_address_district"
+                                            value="{{ $student->permanent_address_district }}"
+                                            name="permanent_address_district">
                                     </div>
                                 </div>
                             </div>

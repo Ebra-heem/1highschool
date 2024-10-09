@@ -43,6 +43,11 @@
         }
     </style>
 </head>
+@php
+    $school = DB::table('schools')
+        ->where('id', auth()->user()->school_id)
+        ->first();
+@endphp
 
 <body>
     <div class="container mt-2">
